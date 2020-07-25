@@ -51,6 +51,21 @@ const paint = () => {
   // HINT:
   //   https://developer.mozilla.org/en-US/docs/Web/API/Element/classList
   //   https://developer.mozilla.org/en-US/docs/Web/API/Element/getElementsByTagName
+  let rows = Array.from(document.getElementsByTagName('tr'))
+  rows.forEach(Cellval => {
+    let tdArray = Array.from(element.getElementsByTagName('td'))
+    tdArray.forEach (td=>{
+      let cell = td
+      let row = td.dataset.row
+      let col = td.dataset.col
+      cState =  gol.getcell(row, col)
+      If (cState === 1) {
+        cell.classList.add('alive')
+      } else {
+        cell.classList.remove('alive')
+      }
+    })
+  })
 };
 
 /**
