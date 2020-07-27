@@ -78,6 +78,7 @@ document.getElementById('board').addEventListener('click', (event) => {
     let cell = event.target
     let row = cell.dataset.row
     let col = cell.dataset.col
+    console.log('board==>',row, col)
     let state = gol.getCell(row,col)
     if (state === 1) {
       gol.setCell(0,row,col)
@@ -128,6 +129,7 @@ document.getElementById('random_btn').addEventListener('click', (event) => {
         let value = getRandom()
         let row = td.dataset.row
         let col = td.dataset.col
+        console.log('random==>',row,col)
         gol.setCell(value, row, col)
       })
     })

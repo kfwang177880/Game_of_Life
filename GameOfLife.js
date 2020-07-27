@@ -40,6 +40,7 @@ class GameOfLife {
   
   getCell (row,col){
     // create cellExist function and then do if this.cellExist() { code rest in here}
+    console.log('get cell', row, col)
     if (value = 1){
       return value =  1;
     } else if (value = 0) {
@@ -51,6 +52,7 @@ class GameOfLife {
   setCell (value, row, col){
      let board = this.board
      board[row][col] = value
+     console.log(board, row, col)
   }
 
   toggleCell(row, col) {
@@ -65,9 +67,10 @@ class GameOfLife {
 
   livingNeighbors(row, col) {
     // TODO: Return the count of living neighbors.
-    var count = 0;
+    let board = this.board
+    let count = 0;
     if (row-1 >= 0) {
-        if (board[row-1][col] == 1) count++;
+        if (board[row-1][col] == 1) count++;  
     }
     if (row-1 >= 0 && col-1 >= 0) {
         if (board[row-1][col-1] == 1) count++;
@@ -108,20 +111,27 @@ class GameOfLife {
     // 1. Count alive neighbors for all cells
     // 2. Set the next state of all cells in newBoard,
     // based on their current alive neighbors
-  
+    let board = this.board
     for (var i = 0; i < this.height; i++) {
       for (var j = 0; j < this.width; j++) {
+        
         let state = board[i][j]
- 
-        let neighbors = livingNeighbors(i, j)
-      
-        if (state === 0 && neighbors === 3) {
-          newBoard[i][j] = 1
-        } else if (state === 1 && (neighbors < 2 || neighbors > 3)) {
-          newBoard[i][j] = 0
-        } else {
+
+        if (i == 0 || i == col - 1 || j == 0 || j == row -1) {
           newBoard[i][j] = state
+        } else {
+          
+          let neighbors = livingNeighbors(i, j)
+      
+          if (state === 0 && neighbors === 3) {
+            newBoard[i][j] = 1
+          } else if (state === 1 && (neighbors < 2 || neighbors > 3)) {
+            newBoard[i][j] = 0
+          } else {
+            newBoard[i][j] = state
+          }
         }
+  
       }
     }
     this.board = newBoard;
