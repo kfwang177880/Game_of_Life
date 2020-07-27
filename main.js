@@ -52,20 +52,20 @@ const paint = () => {
   //   https://developer.mozilla.org/en-US/docs/Web/API/Element/classList
   //   https://developer.mozilla.org/en-US/docs/Web/API/Element/getElementsByTagName
   let rows = Array.from(document.getElementsByTagName('tr'))
-  rows.forEach(Cellval => {
+  rows.forEach(element => {
     let tdArray = Array.from(element.getElementsByTagName('td'))
     tdArray.forEach (td=>{
       let cell = td
       let row = td.dataset.row
       let col = td.dataset.col
-      cState =  gol.getcell(row, col)
-      If (cState === 1) {
+      state =  gol.getCell(row, col)
+      if (state === 1) {
         cell.classList.add('alive')
       } else {
         cell.classList.remove('alive')
       }
-    })
-  })
+    } )
+  } )
 };
 
 /**
@@ -74,10 +74,27 @@ const paint = () => {
 
 document.getElementById('board').addEventListener('click', (event) => {
   // TODO: Toggle clicked cell (event.target) and paint
+  if (event.target.matches('td')) {
+    let cell = event.target
+    let row = cell.dataset.row
+    let col = cell.dataset.col
+    let state = gol.getCell(row,col)
+    if (state === 1) {
+      gol.setCell(0,row,col)
+    } else{
+      gol.setCell(1,row,col)
+    }
+  }
+  paint()
 });
 
 document.getElementById('step_btn').addEventListener('click', (event) => {
   // TODO: Do one gol tick and paint
+  if (event.target.matches('#step_btn')) {
+    console.log('Hello')
+    gol.tick()
+    paint()
+  }
 });
 
 document.getElementById('play_btn').addEventListener('click', (event) => {
@@ -85,12 +102,50 @@ document.getElementById('play_btn').addEventListener('click', (event) => {
   // repeatedly every fixed time interval.
   // HINT:
   // https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/setInterval
+  let play = false
+  if (event.target.matches('#play_btn') && !play) {
+    play = true
+    setInterval(() => {
+      gol.tick()
+      paint() 
+    }, 500)
+    
+  }
+  
 });
+
+function getRandom() {
+  return Math.floor(Math.random() * Math.floor(2));
+}
 
 document.getElementById('random_btn').addEventListener('click', (event) => {
   // TODO: Randomize the board and paint
+  if (event.target.matches('#random_btn')) {
+    let rows = Array.from(document.getElementsByTagName('tr'))
+    rows.forEach(element => {
+      let tdArray = Array.from(element.getElementsByTagName('td'))
+      tdArray.forEach(td => {
+        let value = getRandom()
+        let row = td.dataset.row
+        let col = td.dataset.col
+        gol.setCell(value, row, col)
+      })
+    })
+  }
 });
 
 document.getElementById('clear_btn').addEventListener('click', (event) => {
   // TODO: Clear the board and paint
+  if (event.target.matches('#clear_btn')) {
+    let rows = Array.from(document.getElementsByTagName('tr'))
+    rows.forEach(element => {
+      let tdArray = Array.from(element.getElementsByTagName('td'))
+      tdArray.forEach(td => {
+        let row = td.dataset.row
+        let col = td.dataset.col
+        gol.setCell(0, row, col)
+      } )
+    } )
+  }
+
 });

@@ -8,7 +8,7 @@ class GameOfLife {
   /**
    * Returns a 2D Array
    */
- 
+
   makeBoard() {
     // TODO: Create and return an 2D Array
     // with `this.heigh` as rows and `this.width` as cols.
@@ -19,100 +19,78 @@ class GameOfLife {
     //  [0, 0, 0],
     //  [0, 0, 0],
     // ]
-    let arr = new Array(this.height)
+    let board = []
     for (var i = 0; i < this.height; i++) {
-      arr[i] = new Array(this.width)
-    }
-    return arr
-  }
-
-  let grid;
-  let col ;
-  let row ;
-  let resolution = 20;
-
-  function setup (col, row) {
-    createCanvas(600,400)
-    col = this.width / resolution
-    row = this.height / resolution
-    grid = makeBoard()
-    for (var i = 0; i < col; i++) {
-      for (var i = 0; i < row; i++) {
-        grid[i][j] = floor(random(2))
+      let row = []
+      for (var j = 0; j < this.width; j++) {
+        let col = 0
+        row.push(col)
       }
+      board.push(row)
     }
   }
 
-  function draw(){
-    background(0);
+  indexFor(row,col){
+    // return undefined if we're out of bound
+    if (row < 0 || row >= this.height || col < 0 ||col >= this.width) {
+      return;
+    }
+    return row * this.width + col;
+  }
   
-    for (var i = 0; i < col; i++) {
-      for (var i = 0; i < row; i++) {
-        fill(255);
-        stroke(255);
-        rect(x,y,resolution-1,resolution-1)
-      }
+  getCell (row,col){
+    // create cellExist function and then do if this.cellExist() { code rest in here}
+    if (value = 1){
+      return value =  1;
+    } else if (value = 0) {
+      return value = 0;
     }
-    let next = makeBoard (col,row)
-    for (var i = 0; i < col; i++) {
-      for (var i = 0; i < row; i++) {
-        let state = grid[i][j]
-
-        let neighbors = countNeighbors(gird, i, j)
-      
-        if (state == 0 && neighbors === 3) {
-          next[i][j] = 1
-        } else if (state == 1 && (neighbors < 2 || neighbors > 3)) {
-          next[i][j] = 0
-        } else {
-        next[i][j] = state
-        }
-      }
-    //  sum += grid[i-1][j-1]
-    //  sum += grid[i][j-1]
-    //  sum += grid[i+1][j-1]
-    //  sum += grid[i-1][j+1]
-    //  sum += grid[i][j+1]
-    //  sum += grid[i+1][j+1]
-    //  sum += grid[i+][j]
-    //  sum += grid[i-1][j]
-    }
-// count live neighbor
-
-  
-  grid = next
-
+    return value; 
   }
 
-  function countNeighbors(grid, x, y){
-    let sum = 0
-    for (var i = -1; i < 2; i++) {
-      for (var i = -1; i < 2; i++) {
-        let col = (x + i+ col) % col
-        let row = (y + j + row) % row
-        sum += grid[row][col]
-      }
-    }
-    sum -= grid[x][y]
-    return sum
+  setCell (value, row, col){
+     let board = this.board
+     board[row][col] = value
+  }
+
+  toggleCell(row, col) {
+  // toggles cell from 0 to 1 or from 1 to 0
+    let board = this.board
+    board[row][col] = !board[row][col]
   }
 
   /**
    * Return the amount of living neighbors around a given coordinate.
    */
 
-  livingNeighbors(grid, row, col) {
+  livingNeighbors(row, col) {
     // TODO: Return the count of living neighbors.
-    let count = 0
-    for (var i = row-1; i <= row+1; i++) {
-      for (var j = col-1; j <= col+1; j++) {
-        if (i >= 0 && i < this.width && j >= 0 && j < this.height) {
-          count += grid[i][j] 
-        }
-      }
+    var count = 0;
+    if (row-1 >= 0) {
+        if (board[row-1][col] == 1) count++;
     }
-    count -= grid[i][j]
-    return count
+    if (row-1 >= 0 && col-1 >= 0) {
+        if (board[row-1][col-1] == 1) count++;
+    }
+    if (row-1 >= 0 && col+1 < this.width) {
+        if (board[row-1][col+1] == 1) count++;
+    }
+    if (col-1 >= 0) {
+        if (board[row][col-1] == 1) count++;
+    }
+    if (col+1 < this.width) {
+        if (board[row][col+1] == 1) count++;
+    }
+    if (row+1 < this.height) {
+        if (boad[row+1][col] == 1) count++;
+    }
+    if (row+1 < this.height && col-1 >= 0) {
+        if (grid[row+1][col-1] == 1) count++;
+    }
+    if (row+1 < this.height && col+1 < this.width) {
+        if (board[row+1][col+1] == 1) count++;
+    }
+    return count;
   }
 
   /**
@@ -130,11 +108,24 @@ class GameOfLife {
     // 1. Count alive neighbors for all cells
     // 2. Set the next state of all cells in newBoard,
     // based on their current alive neighbors
-    var randomHoleIndex = Math.floor(Math.random() * this.width * this.height)
-    for (var i = row-1; i <= row+1; i++) {
-      for (var j = col-1; j <= col+1; j++) {
+  
+    for (var i = 0; i < this.height; i++) {
+      for (var j = 0; j < this.width; j++) {
+        let state = board[i][j]
+ 
+        let neighbors = livingNeighbors(i, j)
+      
+        if (state === 0 && neighbors === 3) {
+          newBoard[i][j] = 1
+        } else if (state === 1 && (neighbors < 2 || neighbors > 3)) {
+          newBoard[i][j] = 0
+        } else {
+          newBoard[i][j] = state
+        }
       }
     }
     this.board = newBoard;
   }
+  
 }
+  
